@@ -1,34 +1,33 @@
 "use client";
 
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Float, MeshDistortMaterial, MeshWobbleMaterial, Sphere, Torus, Octahedron, Line } from '@react-three/drei';
-import { useRef, useMemo } from 'react';
+import { OrbitControls, Float, MeshDistortMaterial, MeshWobbleMaterial, Sphere, Torus, Octahedron, Line, useGLTF, Stage, Center } from '@react-three/drei';
+import { useRef, useMemo, Suspense } from 'react';
 import * as THREE from 'three';
 
 function HeartModel() {
-  const meshRef = useRef<THREE.Mesh>(null);
+  const { scene } = useGLTF('/models/heart.glb');
+  const groupRef = useRef<THREE.Group>(null);
+  
   useFrame((state) => {
-    const scale = 1 + Math.sin(state.clock.getElapsedTime() * 4) * 0.1;
-    if (meshRef.current) {
-      meshRef.current.scale.set(scale, scale, scale);
+    const pulse = 1 + Math.sin(state.clock.getElapsedTime() * 2) * 0.03;
+    if (groupRef.current) {
+      groupRef.current.scale.set(pulse, pulse, pulse);
     }
   });
 
   return (
-    <group>
-      <mesh ref={meshRef}>
-        <sphereGeometry args={[1, 32, 32]} />
-        <meshStandardMaterial color="#ef4444" roughness={0.2} metalness={0.8} />
-      </mesh>
-      {/* Rings representing vessels */}
-      {[0, 1, 2].map((i) => (
-        <Torus key={i} args={[1.2, 0.05, 16, 100]} rotation={[Math.PI / (i + 1), 0, 0]}>
-          <meshStandardMaterial color="#fca5a5" opacity={0.3} transparent />
-        </Torus>
-      ))}
-    </group>
+    <Stage intensity={0.5} environment="city" adjustCamera={true}>
+      <Center>
+        <group ref={groupRef}>
+          <primitive object={scene} />
+        </group>
+      </Center>
+    </Stage>
   );
 }
+
+useGLTF.preload('/models/heart.glb');
 
 function NeuronModel() {
   const points = useMemo(() => {
@@ -127,14 +126,22 @@ export default function ThreeModelViewer({ type }: { type: string }) {
       <div className="absolute top-4 left-6 z-10">
          <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest bg-emerald-950/30 px-2 py-1 rounded">Visualizador Bio-Médico 3D</span>
       </div>
-      <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
+      <Canvas camera={{ position: [0, 0, 5], fov: 45 }} shadows shadow-map-type={THREE.PCFSoftShadowMap}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1.5} />
         <spotLight position={[-10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
         
-        <CenterContent type={type} />
+        <Suspense fallback={null}>
+          <CenterContent type={type} />
+        </Suspense>
         
-        <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={0.5} />
+        <OrbitControls 
+          enableZoom={true} 
+          autoRotate 
+          autoRotateSpeed={0.5} 
+          minDistance={2} 
+          maxDistance={10} 
+        />
       </Canvas>
     </div>
   );

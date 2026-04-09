@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft, ChevronRight, ChevronUp, ChevronDown, Move } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ChevronUp, ChevronDown, Move, ZoomIn, ZoomOut } from 'lucide-react';
 
 const ForceGraph3D = dynamic(() => import('react-force-graph-3d'), { 
   ssr: false,
@@ -36,9 +36,22 @@ export default function ThreeGraph() {
   const handlePan = useCallback((dx: number, dy: number) => {
     if (fgRef.current) {
       const camPos = fgRef.current.cameraPosition();
+      // Moving both camera position and target to simulate panning
       fgRef.current.cameraPosition(
         { x: camPos.x + dx, y: camPos.y + dy, z: camPos.z },
         { x: camPos.x + dx, y: camPos.y + dy, z: 0 },
+        500
+      );
+    }
+  }, []);
+
+  const handleZoom = useCallback((factor: number) => {
+    if (fgRef.current) {
+      const camPos = fgRef.current.cameraPosition();
+      // Adjusting Z position for zooming
+      fgRef.current.cameraPosition(
+        { x: camPos.x, y: camPos.y, z: camPos.z * factor },
+        undefined,
         500
       );
     }
@@ -63,15 +76,22 @@ export default function ThreeGraph() {
         </div>
       </div>
 
-      {/* Pan Navigation Controls */}
-      <div className="absolute bottom-4 md:bottom-6 right-4 md:right-8 z-10 flex flex-col items-center gap-1 bg-black/50 backdrop-blur-md p-1.5 md:p-2 rounded-xl md:rounded-2xl border border-emerald-900/50 shadow-lg scale-90 md:scale-100">
-        <button onClick={() => handlePan(0, 100)} className="p-1.5 md:p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-900/30 rounded-lg md:rounded-xl transition-all"><ChevronUp size={18} /></button>
-        <div className="flex gap-1">
-          <button onClick={() => handlePan(-100, 0)} className="p-1.5 md:p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-900/30 rounded-lg md:rounded-xl transition-all"><ChevronLeft size={18} /></button>
-          <div className="p-1.5 md:p-2 text-emerald-900"><Move size={18} /></div>
-          <button onClick={() => handlePan(100, 0)} className="p-1.5 md:p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-900/30 rounded-lg md:rounded-xl transition-all"><ChevronRight size={18} /></button>
+      {/* Pan & Zoom Navigation Controls */}
+      <div className="absolute bottom-4 md:bottom-6 right-4 md:right-8 z-10 flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-1 bg-black/50 backdrop-blur-md p-1.5 md:p-2 rounded-xl md:rounded-2xl border border-emerald-900/50 shadow-lg scale-90 md:scale-100">
+          <button onClick={() => handlePan(0, 50)} className="p-1.5 md:p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-900/30 rounded-lg md:rounded-xl transition-all" title="Arriba"><ChevronUp size={18} /></button>
+          <div className="flex gap-1">
+            <button onClick={() => handlePan(-50, 0)} className="p-1.5 md:p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-900/30 rounded-lg md:rounded-xl transition-all" title="Izquierda"><ChevronLeft size={18} /></button>
+            <div className="p-1.5 md:p-2 text-emerald-900"><Move size={18} /></div>
+            <button onClick={() => handlePan(50, 0)} className="p-1.5 md:p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-900/30 rounded-lg md:rounded-xl transition-all" title="Derecha"><ChevronRight size={18} /></button>
+          </div>
+          <button onClick={() => handlePan(0, -50)} className="p-1.5 md:p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-900/30 rounded-lg md:rounded-xl transition-all" title="Abajo"><ChevronDown size={18} /></button>
         </div>
-        <button onClick={() => handlePan(0, -100)} className="p-1.5 md:p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-900/30 rounded-lg md:rounded-xl transition-all"><ChevronDown size={18} /></button>
+
+        <div className="flex flex-col gap-1 bg-black/50 backdrop-blur-md p-1.5 md:p-2 rounded-xl md:rounded-2xl border border-emerald-900/50 shadow-lg scale-90 md:scale-100">
+          <button onClick={() => handleZoom(0.8)} className="p-1.5 md:p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-900/30 rounded-lg md:rounded-xl transition-all" title="Acercar"><ZoomIn size={18} /></button>
+          <button onClick={() => handleZoom(1.2)} className="p-1.5 md:p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-900/30 rounded-lg md:rounded-xl transition-all" title="Alejar"><ZoomOut size={18} /></button>
+        </div>
       </div>
 
       <div className="w-full h-full transition-opacity duration-1000">
