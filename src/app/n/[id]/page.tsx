@@ -1,7 +1,9 @@
 import { getArticleData, getBacklinks } from "@/lib/markdown";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Share2, Tag, BookOpen, Clock, Fingerprint } from "lucide-react";
+import { ArrowLeft, Clock, Fingerprint, Tag, BookOpen } from "lucide-react";
+import ThreeModelViewer from "@/components/ThreeModelViewer";
+import ArticleEvolutionDisplay from "@/components/ArticleEvolutionDisplay";
 
 export default async function ArticlePage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -42,10 +44,22 @@ export default async function ArticlePage({ params }: { params: Promise<{ id: st
 
       {/* Main Reading Area */}
       <article className="w-full max-w-3xl mx-auto px-6 py-12">
+        {/* 3D Biological Visualization */}
+        {article.model3d && (
+          <div className="mb-12">
+            <ThreeModelViewer type={article.model3d} />
+          </div>
+        )}
+
         <div 
           className="prose prose-lg md:prose-xl prose-invert prose-headings:font-serif prose-headings:text-slate-100 prose-p:text-slate-300 prose-li:text-slate-300 max-w-none leading-relaxed"
           dangerouslySetInnerHTML={{ __html: article.htmlContent }}
         />
+
+        {/* Evolution Data Display */}
+        {article.evolutionData && (
+          <ArticleEvolutionDisplay data={article.evolutionData} />
+        )}
 
         {article.tags.length > 0 && (
           <div className="mt-12 pt-8 border-t border-slate-800 flex flex-wrap gap-2">

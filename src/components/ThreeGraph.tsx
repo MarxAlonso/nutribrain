@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
+import { ChevronLeft, ChevronRight, ChevronUp, ChevronDown, Move } from 'lucide-react';
 
 const ForceGraph3D = dynamic(() => import('react-force-graph-3d'), { 
   ssr: false,
@@ -18,6 +19,7 @@ export default function ThreeGraph() {
   const [data, setData] = useState({ nodes: [], links: [] });
   const [SpriteText, setSpriteText] = useState<any>(null);
   const router = useRouter();
+  const fgRef = useRef<any>(null);
 
   useEffect(() => {
     // Load graph data
@@ -31,6 +33,17 @@ export default function ThreeGraph() {
     });
   }, []);
 
+  const handlePan = useCallback((dx: number, dy: number) => {
+    if (fgRef.current) {
+      const camPos = fgRef.current.cameraPosition();
+      fgRef.current.cameraPosition(
+        { x: camPos.x + dx, y: camPos.y + dy, z: camPos.z },
+        { x: camPos.x + dx, y: camPos.y + dy, z: 0 },
+        500
+      );
+    }
+  }, []);
+
   return (
     <div className="w-full h-[600px] bg-[#030812] rounded-3xl border border-slate-800/50 overflow-hidden relative group shadow-2xl shadow-emerald-950/20">
       {/* HUD Info */}
@@ -39,23 +52,39 @@ export default function ThreeGraph() {
         <p className="text-xs text-slate-500 font-medium">Click para navegar • Zoom para profundizar • Drag para rotar</p>
       </div>
       
-      <div className="absolute bottom-6 left-8 z-10 flex gap-6 pointer-events-none bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/5">
-        <div className="flex items-center gap-2">
-           <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]"></div>
-           <span className="text-[10px] text-slate-300 font-bold uppercase tracking-wider">Estudio Clínico</span>
+      <div className="absolute bottom-6 left-8 z-10 flex flex-col gap-3 pointer-events-none bg-black/40 backdrop-blur-md px-5 py-4 rounded-2xl border border-white/5">
+        <div className="flex items-center gap-3">
+           <div className="w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_12px_#10b981]"></div>
+           <span className="text-[11px] text-slate-200 font-bold uppercase tracking-wider">Estudio Clínico</span>
         </div>
-        <div className="flex items-center gap-2">
-           <div className="w-6 h-[1px] bg-emerald-800"></div>
-           <span className="text-[10px] text-slate-300 font-bold uppercase tracking-wider">Conexión Evidente</span>
+        <div className="flex items-center gap-3">
+           <div className="w-6 h-[2px] bg-emerald-500 shadow-[0_0_10px_#10b981]"></div>
+           <span className="text-[11px] text-slate-200 font-bold uppercase tracking-wider">Conexión Neuronal</span>
         </div>
       </div>
 
-      <div className="w-full h-full opacity-0 animate-in fade-in fill-mode-forwards duration-1000">
+      {/* Pan Navigation Controls */}
+      <div className="absolute bottom-6 right-8 z-10 flex flex-col items-center gap-1 bg-black/50 backdrop-blur-md p-2 rounded-2xl border border-emerald-900/50 shadow-lg">
+        <button onClick={() => handlePan(0, 100)} className="p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-900/30 rounded-xl transition-all"><ChevronUp size={20} /></button>
+        <div className="flex gap-1">
+          <button onClick={() => handlePan(-100, 0)} className="p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-900/30 rounded-xl transition-all"><ChevronLeft size={20} /></button>
+          <div className="p-2 text-emerald-900"><Move size={20} /></div>
+          <button onClick={() => handlePan(100, 0)} className="p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-900/30 rounded-xl transition-all"><ChevronRight size={20} /></button>
+        </div>
+        <button onClick={() => handlePan(0, -100)} className="p-2 text-slate-400 hover:text-emerald-400 hover:bg-emerald-900/30 rounded-xl transition-all"><ChevronDown size={20} /></button>
+      </div>
+
+      <div className="w-full h-full transition-opacity duration-1000">
         <ForceGraph3D
+          ref={fgRef}
           graphData={data}
           nodeLabel="name"
           nodeColor={() => '#10b981'}
-          linkColor={() => 'rgba(16, 185, 129, 0.2)'}
+          linkColor={() => 'rgba(16, 185, 129, 0.6)'}
+          linkDirectionalParticles={4}
+          linkDirectionalParticleSpeed={0.01}
+          linkDirectionalParticleWidth={2}
+          linkDirectionalParticleColor={() => '#4ade80'}
           backgroundColor="#030812"
           nodeThreeObject={(node: any) => {
             if (!SpriteText) return false;
@@ -69,7 +98,7 @@ export default function ThreeGraph() {
             router.push(`/n/${node.id}`);
           }}
           nodeResolution={24}
-          linkWidth={1.5}
+          linkWidth={2}
           showNavInfo={false}
           nodeRelSize={7}
         />

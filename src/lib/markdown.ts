@@ -12,6 +12,8 @@ export interface ArticleMetadata {
   date: string;
   author: string;
   tags: string[];
+  model3d?: string;
+  evolutionData?: any[];
 }
 
 export interface Article extends ArticleMetadata {
@@ -76,6 +78,8 @@ export async function getArticleData(id: string): Promise<Article | null> {
     date: matterResult.data.date || '',
     author: matterResult.data.author || '',
     tags: matterResult.data.tags || [],
+    model3d: matterResult.data.model3d || null,
+    evolutionData: matterResult.data.evolutionData || null,
     content: matterResult.content,
     htmlContent,
   };
@@ -151,11 +155,21 @@ export async function getGraphData(): Promise<GraphData> {
 
   const links: { source: string; target: string }[] = [];
   
+  // Map titles to IDs for easier wiki-linking
+  const titleToIdMap: Record<string, string> = {};
+  allArticles.forEach(a => {
+    titleToIdMap[a.title.toLowerCase()] = a.id;
+    titleToIdMap[normalizeId(a.title)] = a.id;
+  });
+
   for (const article of allArticles) {
     const wikiLinkRegex = /\[\[(.*?)\]\]/g;
     let match;
     while ((match = wikiLinkRegex.exec(article.content)) !== null) {
-      const targetId = normalizeId(match[1]);
+      const linkText = match[1];
+      const normalizedLink = normalizeId(linkText);
+      const targetId = titleToIdMap[linkText.toLowerCase()] || titleToIdMap[normalizedLink] || normalizedLink;
+      
       // Only link if the target exists in our node list
       if (nodes.some(n => n.id === targetId)) {
         links.push({
