@@ -78,11 +78,11 @@ export default function ChatBot() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-6 right-6 w-14 h-14 bg-emerald-500 hover:bg-emerald-400 text-slate-900 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.3)] z-50 transition-colors"
+            className="fixed bottom-4 md:bottom-6 right-4 md:right-6 w-12 md:w-14 h-12 md:h-14 bg-emerald-500 hover:bg-emerald-400 text-slate-900 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.3)] z-50 transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <MessageCircle size={28} />
+            <MessageCircle size={26} />
           </motion.button>
         )}
       </AnimatePresence>
@@ -95,7 +95,7 @@ export default function ChatBot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-6 right-6 w-[350px] sm:w-[400px] h-[550px] max-h-[85vh] bg-[#060e17] border border-slate-800 rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden"
+            className="fixed bottom-4 right-4 md:bottom-6 md:right-6 w-[calc(100%-2rem)] md:w-[400px] h-[500px] md:h-[550px] max-h-[80vh] bg-[#060e17] border border-slate-800 rounded-2xl shadow-2xl flex flex-col z-50 overflow-hidden"
           >
             {/* Header */}
             <div className="bg-[#091522] border-b border-slate-800 p-4 flex items-center justify-between">

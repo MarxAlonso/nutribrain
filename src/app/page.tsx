@@ -17,7 +17,7 @@ export default async function Home() {
            <Activity size={16} /> Base de evidencia científica actualizada
         </div>
         
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+        <h1 className="text-4xl md:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight">
           Inteligencia <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-200">Nutricional</span>
         </h1>
         <p className="text-lg md:text-xl text-slate-400 max-w-2xl mb-10 leading-relaxed font-light">
