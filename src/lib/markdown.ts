@@ -135,3 +135,36 @@ export async function getBacklinks(targetId: string): Promise<Backlink[]> {
 
   return backlinks;
 }
+
+export interface GraphData {
+  nodes: { id: string; name: string; val: number }[];
+  links: { source: string; target: string }[];
+}
+
+export async function getGraphData(): Promise<GraphData> {
+  const allArticles = await getAllArticles();
+  const nodes = allArticles.map(article => ({
+    id: article.id,
+    name: article.title,
+    val: 1 + (article.tags.length * 0.5) // size based on complexity/tags
+  }));
+
+  const links: { source: string; target: string }[] = [];
+  
+  for (const article of allArticles) {
+    const wikiLinkRegex = /\[\[(.*?)\]\]/g;
+    let match;
+    while ((match = wikiLinkRegex.exec(article.content)) !== null) {
+      const targetId = normalizeId(match[1]);
+      // Only link if the target exists in our node list
+      if (nodes.some(n => n.id === targetId)) {
+        links.push({
+          source: article.id,
+          target: targetId
+        });
+      }
+    }
+  }
+
+  return { nodes, links };
+}

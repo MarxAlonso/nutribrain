@@ -1,6 +1,8 @@
 import { getAllArticles } from "@/lib/markdown";
 import Link from "next/link";
-import { ArrowRight, Activity, Leaf } from "lucide-react";
+import { ArrowRight, Activity, Leaf, Network } from "lucide-react";
+import ThreeGraph from "@/components/ThreeGraph";
+import EvolutionChart3D from "@/components/EvolutionChart3D";
 
 export default async function Home() {
   const articles = await getAllArticles();
@@ -26,9 +28,24 @@ export default async function Home() {
       {/* Grid de Artículos */}
       <section className="w-full bg-[#030812]/50 border-t border-slate-800/50 py-16 px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center gap-2 mb-10 text-slate-200">
-            <Leaf className="text-emerald-500" size={24} />
-            <h2 className="text-3xl font-bold">Investigaciones</h2>
+          <div className="flex items-center justify-between mb-10">
+            <div className="flex items-center gap-2 text-slate-200">
+              <Leaf className="text-emerald-500" size={24} />
+              <h2 className="text-3xl font-bold">Investigaciones</h2>
+            </div>
+          </div>
+
+          {/* 3D Knowledge Graph */}
+          <div className="mb-24">
+            <ThreeGraph />
+          </div>
+
+          {/* 3D Evolution Chart */}
+          <EvolutionChart3D />
+
+          <div className="flex items-center gap-2 mb-8 text-slate-400 mt-16">
+            <Network size={20} />
+            <h3 className="text-xl font-semibold">Cerebro de Datos</h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
