@@ -1,0 +1,49 @@
+Adultos mayores (malnutrición, enfermedades, cuidado)
+1. Malnutrition in the elderly: A narrative review
+Revista: Maturitas
+Tema: malnutrición, sarcopenia, pérdida muscular
+Aporte: explica causas, diagnóstico y manejo nutricional
+Insight clave: la malnutrición aumenta con comorbilidades y edad
+2. Interventions for Malnutrition in Older Adults
+Fuente: NCBI
+Tipo: revisión sistemática + ensayos clínicos
+Tema: intervenciones nutricionales en adultos mayores
+Insight: la malnutrición afecta inmunidad, cognición y recuperación clínica
+3. Nutritional status and quality of life in older adults: systematic review
+Revista científica (2024)
+Tema: relación nutrición ↔ calidad de vida
+Insight: mejor estado nutricional → mejor funcionalidad y bienestar
+4. Health management of malnourished elderly in primary care: a scoping review
+Fuente: PubMed Central
+Tema: diagnóstico y manejo en atención primaria
+Insight: la malnutrición es un factor crítico de mortalidad y deterioro funcional
+5. Nutritional care in older adults: are we doing everything?
+Revista médica (2024)
+Tema: nutrición, fragilidad y sarcopenia
+Insight: malnutrición → discapacidad, hospitalización y mortalidad
+6. Review of the Nutritional Status in Older Adult Population
+Revista: OBM Geriatrics
+Tema: factores nutricionales en envejecimiento
+Insight: nutrición adecuada es clave para independencia en adultos mayores
+👶📚 Niños (crecimiento, desarrollo, malnutrición)
+7. NutriScreener: AI-based malnutrition detection in children
+Tipo: paper reciente (IA + nutrición)
+Tema: detección temprana de desnutrición infantil
+Insight: la malnutrición infantil sigue siendo un problema global crítico
+8. The economics of malnutrition: dietary transition
+Tema: nutrición infantil + enfermedades futuras
+Insight: mala nutrición en infancia → riesgo de enfermedades crónicas en adultez
+9. NutritionVerse-3D: dataset for food intake estimation
+Tema: monitoreo nutricional (niños y adultos)
+Insight: 1 de cada 4 adultos mayores está desnutrido y la medición nutricional es clave
+10. AFINI-T: Automated food intake tracking in long-term care
+Tema: seguimiento nutricional automatizado
+Insight: permite medir consumo real de alimentos para prevenir desnutrición
+🧠💡 Cómo conecta esto con tu app (Nutribrain)
+
+Estos artículos te permiten construir nodos como:
+
+Enfermedad → Necesidad nutricional
+Edad → Requerimientos específicos
+Síntoma → Alimento recomendado
+Déficit → Nutriente clave
