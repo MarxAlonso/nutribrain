@@ -1,65 +1,64 @@
-import Image from "next/image";
+import { getAllArticles } from "@/lib/markdown";
+import Link from "next/link";
+import { ArrowRight, Activity, Leaf } from "lucide-react";
 
-export default function Home() {
+export default async function Home() {
+  const articles = await getAllArticles();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="w-full flex flex-col items-center">
+      {/* Hero Section */}
+      <section className="w-full max-w-5xl mx-auto px-6 py-20 md:py-32 text-center flex flex-col items-center justify-center relative">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-900/20 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+        
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700/50 text-emerald-400 text-sm font-medium mb-8">
+           <Activity size={16} /> Base de evidencia científica actualizada
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        
+        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+          Inteligencia <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-200">Nutricional</span>
+        </h1>
+        <p className="text-lg md:text-xl text-slate-400 max-w-2xl mb-10 leading-relaxed font-light">
+          Explora nuestra biblioteca clínica. Cada lectura te guiará orgánicamente hacia otros conceptos relevantes para mejorar tu calidad de vida.
+        </p>
+      </section>
+
+      {/* Grid de Artículos */}
+      <section className="w-full bg-[#030812]/50 border-t border-slate-800/50 py-16 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-2 mb-10 text-slate-200">
+            <Leaf className="text-emerald-500" size={24} />
+            <h2 className="text-3xl font-bold">Investigaciones</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {articles.map((article) => (
+              <Link href={`/n/${article.id}`} key={article.id} className="group block h-full">
+                <article className="bg-slate-900/40 backdrop-blur-sm rounded-2xl p-6 border border-slate-800 hover:border-emerald-500/50 hover:bg-slate-800/60 transition-all duration-300 h-full flex flex-col justify-between shadow-lg">
+                  <div>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {article.tags.map(tag => (
+                        <span key={tag} className="text-[10px] font-bold tracking-wider uppercase bg-emerald-950/50 text-emerald-400 px-2.5 py-1 rounded-md border border-emerald-900/50">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <h3 className="text-xl md:text-2xl font-bold text-slate-100 group-hover:text-emerald-300 transition-colors mb-2 leading-snug">
+                      {article.title}
+                    </h3>
+                  </div>
+                  <div className="mt-8 flex items-center justify-between text-sm">
+                    <span className="text-slate-500 font-medium">Lectura de 3 min</span>
+                    <div className="h-8 w-8 rounded-full bg-slate-800 text-emerald-500 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                      <ArrowRight size={16} />
+                    </div>
+                  </div>
+                </article>
+              </Link>
+            ))}
+          </div>
         </div>
-      </main>
+      </section>
     </div>
   );
 }

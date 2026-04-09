@@ -1,26 +1,55 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Base theme: Dark theme with Navy Blue and Dark Green combination */
+    --background: #060e17; /* Very dark navy */
+    --foreground: #e2e8f0; /* Slate 200 */
+    --card: #0b1522;
+    --border: #1e293b;
+    --accent: #0f172a;
+    
+    /* Green touches */
+    --primary: #10b981; /* Emerald 500 */
+    --primary-hover: #059669; /* Emerald 600 */
   }
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* The main background gradient requested */
+  background-image: radial-gradient(circle at top right, #092015 0%, #060e17 40%, #060e17 100%);
+  background-attachment: fixed;
+}
+
+/* Custom internal links to look like organic text but clickable */
+.internal-link {
+  font-weight: 500;
+  color: #34d399; /* Emerald 400 */
+  text-decoration: none;
+  border-bottom: 1px dotted #34d399;
+  transition: all 0.3s ease;
+}
+
+.internal-link:hover {
+  color: #6ee7b7; /* Emerald 300 */
+  border-bottom: 1px solid #6ee7b7;
+  text-shadow: 0 0 8px rgba(52, 211, 153, 0.4);
+}
+
+/* Custom scrollbar to make it premium */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #020617; 
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b; 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155; 
 }
